@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id');
+            $table->decimal('amount', 20,2);
+            $table->decimal('balance_before', 20,2);
+            $table->decimal('balance_after', 20,2);
+            $table->string('remark')->nullable();
+            $table->string('type');
             $table->timestamps();
         });
     }

@@ -11,7 +11,7 @@ class RegisterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,20 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'fullname' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'username' => ['required', 'regex:/^[^\s]+$/', 'unique:users'],
+            'image' => 'required|image',
+            'password' => ['required','min:8','regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/'],
+            'confirm_password' => 'required|same:password',
+        ];
+    }
+
+    public function messages():array
+    {
+        return [
+            'username.regex' => 'The username field should not contain any spaces.',
+            'password.regex' => 'The password filed must contain a lowercase, uppercase, a symbol.',
         ];
     }
 }
