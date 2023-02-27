@@ -3,8 +3,9 @@
 namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class LoginRequest extends FormRequest
+class VerifyOtpRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,15 +23,17 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|exists:users',
-            'password' => 'required',
+            'otp' => [
+                'required',
+                Rule::exists('user_otps')->where('user_id', auth()->user()->id),
+            ],
         ];
     }
 
     public function messages():array
     {
         return [
-            'email.exists' => 'Email address not found.',
+            'otp.exists' => 'Invaild OTP.',
         ];
     }
 }

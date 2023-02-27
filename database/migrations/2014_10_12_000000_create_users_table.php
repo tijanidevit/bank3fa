@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('image');
             $table->string('pin',6)->nullable();
+            $table->integer('verify')->default(0);
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

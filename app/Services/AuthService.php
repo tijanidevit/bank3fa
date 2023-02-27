@@ -33,6 +33,15 @@ class AuthService
     {
         $user->wallet()->create(['account_number' => rand(1111111111,9999999999)]);
     }
-
-
+    public function login(array $data)
+    {
+       return Auth::attempt($data);
+    }
+    public function verifyOtp(array $data)
+    {
+       DB::transaction(function () use($data){
+        auth()->user()->otp()->where($data)->delete();
+        return auth()->user()->update(['verify' => 1]);
+       });
+    }
 }

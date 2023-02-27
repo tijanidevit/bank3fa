@@ -15,6 +15,9 @@ class QuestionUser
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (!auth()->user()->question) {
+            return redirect()->route("questionPage")->with('error', "Please set your personal question/answer to continue");
+        }
         return $next($request);
     }
 }

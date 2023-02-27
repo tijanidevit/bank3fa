@@ -15,6 +15,9 @@ class VerifyUser
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (!auth()->user()->verified) {
+            return redirect()->route("loginPage")->with('error', "Please register/login to continue");
+        }
         return $next($request);
     }
 }

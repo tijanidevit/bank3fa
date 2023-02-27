@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthenticateUser
+class UserNotAuthenticated
 {
     /**
      * Handle an incoming request.
@@ -15,8 +15,8 @@ class AuthenticateUser
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->user()) {
-            return redirect()->route("login")->with('error', "Please register/login to continue");
+        if (auth()->user()) {
+            return redirect()->route("dashboard");
         }
         return $next($request);
     }

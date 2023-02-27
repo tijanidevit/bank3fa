@@ -2,6 +2,14 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AuthenticateUser;
+use App\Http\Middleware\PinUser;
+use App\Http\Middleware\QuestionUser;
+use App\Http\Middleware\UserNotAuthenticated;
+use App\Http\Middleware\UserNotQuestioned;
+use App\Http\Middleware\UserNotSetPin;
+use App\Http\Middleware\UserNotVerified;
+use App\Http\Middleware\VerifyUser;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -63,5 +71,15 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+
+        'auth.user' => AuthenticateUser::class,
+        'verify.user' => VerifyUser::class,
+        'question.user' => QuestionUser::class,
+        'pin.user' => PinUser::class,
+
+        'userNotAuth' => UserNotAuthenticated::class,
+        'userNotSetPin' => UserNotSetPin::class,
+        'userNotVerified' => UserNotVerified::class,
+        'userNotQuestioned' => UserNotQuestioned::class,
     ];
 }
