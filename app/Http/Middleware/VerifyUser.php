@@ -15,8 +15,8 @@ class VerifyUser
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->user()->verified) {
-            return redirect()->route("loginPage")->with('error', "Please register/login to continue");
+        if (!auth()->user()->verify) {
+            return redirect()->route("verifyEmail")->with('error', "Please verify your email OTP to continue");
         }
         return $next($request);
     }

@@ -51,7 +51,7 @@ class AuthController extends Controller
         }
     }
 
-    public function logout(LoginRequest $request)
+    public function logout()
     {
         Auth::logout();
         return redirect()->route('login');
@@ -65,6 +65,21 @@ class AuthController extends Controller
     {
         try {
             $this->authService->verifyOtp($request->validated());
+        } catch (\Exception $ex) {
+            return redirect()->back()->with(['error' => $ex->getMessage()]);
+        }
+        return redirect()->route('setPin');
+    }
+
+
+    public function setPinPage()
+    {
+        return view('auth.set-pin');
+    }
+    public function setPin(SetPinRequest $request)
+    {
+        try {
+            $this->authService->SetPin($request->validated());
         } catch (\Exception $ex) {
             return redirect()->back()->with(['error' => $ex->getMessage()]);
         }

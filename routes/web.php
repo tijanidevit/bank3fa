@@ -25,11 +25,9 @@ Route::group(['middleware' => 'userNotAuth'], function ()
 
     Route::get('login', [AuthController::class, 'loginPage'])->name('login');
     Route::post('login', [AuthController::class, 'login'])->name('loginAction');
-
-
-    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 });
 
+Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::group(['middleware' => ['auth.user','userNotVerified']], function ()
 {
@@ -41,4 +39,14 @@ Route::group(['middleware' => ['auth.user','verify.user','userNotSetPin']], func
 {
     Route::get('set-pin', [AuthController::class, 'setPinPage'])->name('setPin');
     Route::post('set-pin', [AuthController::class, 'setPin'])->name('setPinAction');
+});
+
+
+
+Route::group(['middleware' => ['auth.user','verify.user','pin.user','question.user']], function ()
+{
+    Route::get('dashboard',function ()
+    {
+        echo "in dashboard";
+    })->name('dashboard');
 });

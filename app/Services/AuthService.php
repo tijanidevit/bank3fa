@@ -39,9 +39,10 @@ class AuthService
     }
     public function verifyOtp(array $data)
     {
-       DB::transaction(function () use($data){
-        auth()->user()->otp()->where($data)->delete();
-        return auth()->user()->update(['verify' => 1]);
+       return DB::transaction(function () use($data){
+        $user = auth()->user();
+        $user->otp()->where($data)->delete();
+        $user->update(['verify' => 1]);
        });
     }
 }

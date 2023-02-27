@@ -27,6 +27,7 @@ class User extends Authenticatable
         'image',
         'username',
         'pin',
+        'verify',
         'password',
     ];
 
