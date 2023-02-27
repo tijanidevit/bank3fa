@@ -74,8 +74,8 @@ class Kernel extends HttpKernel
 
         'auth.user' => AuthenticateUser::class,
         'verify.user' => VerifyUser::class,
-        'question.user' => QuestionUser::class,
         'pin.user' => PinUser::class,
+        'question.user' => QuestionUser::class,
 
         'userNotAuth' => UserNotAuthenticated::class,
         'userNotSetPin' => UserNotSetPin::class,

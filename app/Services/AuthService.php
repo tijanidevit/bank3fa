@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Events\UserRegistered;
 use App\Models\User;
+use App\Models\UserWallet;
 use Illuminate\Support\Str;
 use App\Traits\UploadImageTrait;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,7 @@ class AuthService
     {
         $user->wallet()->create(['account_number' => rand(1111111111,9999999999)]);
     }
-    public function login(array $data)
+    public function login(array $data):bool
     {
        return Auth::attempt($data);
     }
@@ -44,5 +45,14 @@ class AuthService
         $user->otp()->where($data)->delete();
         $user->update(['verify' => 1]);
        });
+    }
+    public function setPin(array $data)
+    {
+        auth()->user()->update($data);
+    }
+
+    public function setQuestion(array $data)
+    {
+        auth()->user()->question()->create($data);
     }
 }

@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('title')
-    Login
+    Set Question
 @endsection
 
 @section('body')
@@ -13,7 +13,7 @@
                 <div class="contact-info-box-style1">
                     <div class="box1"></div>
                     <div class="title">
-                        <h2>Login Here</h2>
+                        <h2>Set Question</h2>
                         <p>And start enjoying free and secure transactions.</p>
                     </div>
 
@@ -23,7 +23,7 @@
                                 <span class="fa fa-user"></span>
                             </div>
                             <div class="text">
-                                <p>Login</p>
+                                <p>Register</p>
                                 <h3>Create an account with your basic details.</h3>
                             </div>
                         </li>
@@ -49,7 +49,7 @@
 
                     <div class="bottom-box">
                         <div class="btn-box">
-                            {{-- <a href="login"><i class="fas fa-arrow-down"></i>Login</a> --}}
+                            {{-- <a href="Set Pin"><i class="fas fa-arrow-down"></i>Set Pin</a> --}}
                         </div>
                         <div class="footer-social-link-style1">
                             <ul class="clearfix">
@@ -81,8 +81,9 @@
             </div>
 
             <div class="col-xl-6">
-                <div class="contact-form" style="background-color: #f5f8f7;">
-                    <form id="contact-form" class="default-form2" action="{{route('login')}}" method="post">
+                <div class="contact-form" style="background-color: #f5f8f7; padding-top: 5em; padding-bottom: 10em;">
+                    <h6 class="my-4">Please enter a question and supply its answer.</h6>
+                    <form id="contact-form" class="default-form2" action="{{route('setQuestionAction')}}" method="post">
                         @csrf
                         <div>
                             @if (session('error'))
@@ -91,28 +92,27 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Email Address</label>
+                            <label>Question</label>
                             <div class="input-box">
-                                <input type="email" required value="{{ old('email') }}" name="email" id="email" placeholder="me@example.com" >
-                                {!!  requestError($errors,'email')  !!}
+                                <input type="text" required name="question" value="{{ old('question') }}" id="question" />
+                                {!!  requestError($errors,'question')  !!}
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label>Password</label>
+                            <label>Answer</label>
                             <div class="input-box">
-                                <input type="password" required name="password" id="password" placeholder="********" />
-                                {!!  requestError($errors,'password')  !!}
+                                <input type="text" required name="answer" value="{{ old('answer') }}" id="answer" />
+                                {!!  requestError($errors,'answer')  !!}
                             </div>
                         </div>
-
 
                         <div class="button-box">
                             <input id="form_botcheck" name="form_botcheck" class="form-control" type="hidden"
                                 value="">
                             <button class="btn-one" type="submit" data-loading-text="Please wait...">
                                 <span class="txt">
-                                    Login
+                                    Set Question
                                 </span>
                             </button>
                         </div>

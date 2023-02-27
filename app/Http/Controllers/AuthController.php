@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\AuthService;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\User\LoginRequest;
+use App\Http\Requests\User\SetPinRequest;
 use App\Http\Requests\User\RegisterRequest;
 use App\Http\Requests\User\VerifyOtpRequest;
-use App\Services\AuthService;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\User\SetQuestionRequest;
 
 class AuthController extends Controller
 {
@@ -72,6 +74,22 @@ class AuthController extends Controller
     }
 
 
+    public function setQuestionPage()
+    {
+        return view('auth.set-question');
+    }
+    public function setQuestion(SetQuestionRequest $request)
+    {
+        try {
+            $this->authService->SetQuestion($request->validated());
+        } catch (\Exception $ex) {
+            return redirect()->back()->with(['error' => $ex->getMessage()]);
+        }
+        return redirect()->route('dashboard');
+    }
+
+
+
     public function setPinPage()
     {
         return view('auth.set-pin');
@@ -83,6 +101,6 @@ class AuthController extends Controller
         } catch (\Exception $ex) {
             return redirect()->back()->with(['error' => $ex->getMessage()]);
         }
-        return redirect()->route('setPin');
+        return redirect()->route('setQuestion');
     }
 }

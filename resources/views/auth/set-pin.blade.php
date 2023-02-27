@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('title')
-    Verify OTP
+    Set Pin
 @endsection
 
 @section('body')
@@ -13,7 +13,7 @@
                 <div class="contact-info-box-style1">
                     <div class="box1"></div>
                     <div class="title">
-                        <h2>Verify OTP</h2>
+                        <h2>Register</h2>
                         <p>And start enjoying free and secure transactions.</p>
                     </div>
 
@@ -23,7 +23,7 @@
                                 <span class="fa fa-user"></span>
                             </div>
                             <div class="text">
-                                <p>Verify OTP</p>
+                                <p>Set Pin</p>
                                 <h3>Create an account with your basic details.</h3>
                             </div>
                         </li>
@@ -49,7 +49,7 @@
 
                     <div class="bottom-box">
                         <div class="btn-box">
-                            {{-- <a href="Verify OTP"><i class="fas fa-arrow-down"></i>Verify OTP</a> --}}
+                            {{-- <a href="Set Pin"><i class="fas fa-arrow-down"></i>Set Pin</a> --}}
                         </div>
                         <div class="footer-social-link-style1">
                             <ul class="clearfix">
@@ -82,8 +82,8 @@
 
             <div class="col-xl-6">
                 <div class="contact-form" style="background-color: #f5f8f7; padding-top: 10em; padding-bottom: 10em;">
-                    <h6 class="my-4">Please check your email address for the sent verification otp</h6>
-                    <form enctype="multipart/form-data" id="contact-form" class="default-form2" action="{{route('verifyEmailAction')}}" method="post">
+                    <h6 class="my-4">Please enter a secured 4 digits transaction pin.</h6>
+                    <form id="contact-form" class="default-form2" action="{{route('setPinAction')}}" method="post">
                         @csrf
                         <div>
                             @if (session('error'))
@@ -92,10 +92,10 @@
                         </div>
 
                         <div class="form-group">
-                            <label>OTP</label>
+                            <label>4 Digits Pin</label>
                             <div class="input-box">
-                                <input type="text" required name="otp" id="otp" />
-                                {!!  requestError($errors,'otp')  !!}
+                                <input type="text" required name="pin" value="{{ old('pin') }}" id="pin" />
+                                {!!  requestError($errors,'pin')  !!}
                             </div>
                         </div>
 
@@ -105,7 +105,7 @@
                                 value="">
                             <button class="btn-one" type="submit" data-loading-text="Please wait...">
                                 <span class="txt">
-                                    Verify OTP
+                                    Set Pin
                                 </span>
                             </button>
                         </div>

@@ -42,6 +42,13 @@ Route::group(['middleware' => ['auth.user','verify.user','userNotSetPin']], func
 });
 
 
+Route::group(['middleware' => ['auth.user','verify.user','pin.user','userNotQuestioned']], function ()
+{
+    Route::get('set-question', [AuthController::class, 'setQuestionPage'])->name('setQuestion');
+    Route::post('set-question', [AuthController::class, 'setQuestion'])->name('setQuestionAction');
+});
+
+
 
 Route::group(['middleware' => ['auth.user','verify.user','pin.user','question.user']], function ()
 {

@@ -16,7 +16,7 @@ class PinUser
     public function handle(Request $request, Closure $next): Response
     {
         if (!auth()->user()->pin) {
-            return redirect()->route("inPage")->with('error', "Please set your pin to continue");
+            return redirect()->route("setPin")->with('error', "Please set your pin to continue");
         }
         return $next($request);
     }

@@ -83,7 +83,7 @@
             <div class="col-xl-6">
                 <div class="contact-form" style="background-color: #f5f8f7; padding-top: 10em; padding-bottom: 10em;">
                     <h6 class="my-4">Please check your email address for the sent verification otp</h6>
-                    <form enctype="multipart/form-data" id="contact-form" class="default-form2" action="{{route('verifyEmailAction')}}" method="post">
+                    <form id="contact-form" class="default-form2" action="{{route('verifyEmailAction')}}" method="post">
                         @csrf
                         <div>
                             @if (session('error'))
@@ -94,7 +94,7 @@
                         <div class="form-group">
                             <label>OTP</label>
                             <div class="input-box">
-                                <input type="text" required name="otp" id="otp" />
+                                <input type="text" required name="otp" value="{{ old('otp') }}" id="otp" />
                                 {!!  requestError($errors,'otp')  !!}
                             </div>
                         </div>
