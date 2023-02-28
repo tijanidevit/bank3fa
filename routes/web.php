@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,8 +53,5 @@ Route::group(['middleware' => ['auth.user','verify.user','pin.user','userNotQues
 
 Route::group(['middleware' => ['auth.user','verify.user','pin.user','question.user']], function ()
 {
-    Route::get('dashboard',function ()
-    {
-        echo "in dashboard";
-    })->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'dashboardPage'])->name('dashboard');
 });

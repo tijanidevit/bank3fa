@@ -6,27 +6,9 @@
 
                     <div class="main-menu-style2-left">
                         <div class="logo-box-style2">
-                            <a href="index-2.html">
+                            <a href="./">
                                 <img src="assets/images/resources/logo-2.png" alt="Awesome Logo" title="">
                             </a>
-                        </div>
-
-                        <div class="looking-banking-box looking-banking-box--style2">
-                            <div class="icon">
-                                <span class="icon-binoculars"></span>
-                            </div>
-                            <div class="select-box clearfix">
-                                <p>Looking</p>
-                                <select class="wide">
-                                    <option data-display="Personal Banking">
-                                        Personal Banking
-                                    </option>
-                                    <option value="1">Business Banking</option>
-                                    <option value="2">Personal Banking 01</option>
-                                    <option value="3">Personal Banking 02</option>
-                                    <option value="4">Personal Banking 03</option>
-                                </select>
-                            </div>
                         </div>
                     </div>
 
@@ -37,34 +19,44 @@
                                 <i class="icon-menu"></i>
                             </a>
 
-                            <ul class="main-menu__list one-page-scroll-menu">
-                                <li class="scrollToLink">
-                                    <a href="#home">Home</a>
-                                </li>
-                                <li class="scrollToLink">
-                                    <a href="#about">About</a>
-                                </li>
-                                <li class="scrollToLink">
-                                    <a href="#service">Services</a>
-                                </li>
-                                <li class="scrollToLink">
-                                    <a href="#news">News</a>
-                                </li>
-                                <li class="scrollToLink">
-                                    <a href="#contact">Get In Touch</a>
-                                </li>
-                            </ul>
+                            @if (!auth()->user())
+                                <ul class="main-menu__list one-page-scroll-menu">
+                                    <li class="scrollToLink">
+                                        <a href="#home">Home</a>
+                                    </li>
+                                    <li class="scrollToLink">
+                                        <a href="#about">About</a>
+                                    </li>
+                                    <li class="scrollToLink">
+                                        <a href="#service">Services</a>
+                                    </li>
 
-                        </div>
+                                    <li class="">
+                                        <a href="register" class="btn text-white btn-success"> Register </a>
+                                    </li>
+                                    &nbsp;
+                                    <li class="">
+                                        <a href="login" class="btn text-white btn-success"> Login</a>
+                                    </li>
+                                </ul>
 
-                        <div class="header-btn-one">
-                            <a href="#"><span class="icon-home-button"></span> Make Payment</a>
-                        </div>
+                            @else
+                                <ul class="main-menu__list one-page-scroll-menu">
+                                    <li class="scrollToLink">
+                                        <a href="{{ route('dashboard') }}">Dashboard</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="#send-funds">Send Funds</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="r">Transactions</a>
+                                    </li>
+                                    <li class="">
+                                        <a href="logout" class="btn text-white btn-success"> Logout</a>
+                                    </li>
+                                </ul>
+                            @endif
 
-                        <div class="header-logon-box">
-                            <a href="register" class="mr-3 btn btn-success"> Register</a>
-                            &nbsp;
-                            <a href="login" class="btn btn-success"> Login</a>
                         </div>
 
                     </div>
@@ -89,7 +81,7 @@
             <i class="fas fa-plus"></i>
         </span>
         <div class="logo-box">
-            <a href="index-2.html" aria-label="logo image">
+            <a href="./" aria-label="logo image">
                 <img src="assets/images/resources/mobile-nav-logo.png" alt="" />
             </a>
         </div>

@@ -32,16 +32,16 @@
                             </div>
                             <div class="text">
                                 <p>
-                                    Don’t just make a deposit, make an investment today.
+                                    Don't just make a deposit, make an investment today.
                                 </p>
                             </div>
                             <div class="btns-box">
-                                <a class="btn-one" href="about.html">
+                                <a class="btn-one" href="#">
                                     <span class="txt">
                                         Read More
                                     </span>
                                 </a>
-                                <a class="btn-one style2" href="about.html">
+                                <a class="btn-one style2" href="#">
                                     <span class="txt">
                                         Check Eligibility
                                     </span>
@@ -84,12 +84,12 @@
                                 </p>
                             </div>
                             <div class="btns-box">
-                                <a class="btn-one" href="about.html">
+                                <a class="btn-one" href="#">
                                     <span class="txt">
                                         Read More
                                     </span>
                                 </a>
-                                <a class="btn-one style2" href="about.html">
+                                <a class="btn-one style2" href="#">
                                     <span class="txt">
                                         Check Eligibility
                                     </span>
@@ -133,12 +133,12 @@
                                 </p>
                             </div>
                             <div class="btns-box">
-                                <a class="btn-one" href="about.html">
+                                <a class="btn-one" href="#">
                                     <span class="txt">
                                         Read More
                                     </span>
                                 </a>
-                                <a class="btn-one style2" href="about.html">
+                                <a class="btn-one style2" href="#">
                                     <span class="txt">
                                         Check Eligibility
                                     </span>
@@ -260,7 +260,7 @@
     </div>
 </section>
 
-<section class="locker-facility-area">
+<section id="service" class="locker-facility-area">
     <div class="container">
         <div class="row">
             <div class="col-xl-8">
@@ -322,7 +322,7 @@
                             <span class="icon-faq"></span>
                         </div>
                         <p>Have queries? Click below link</p>
-                        <a href="#"><span class="icon-right-arrow"></span>faq’s</a>
+                        <a href="#"><span class="icon-right-arrow"></span>faq's</a>
                     </div>
                 </div>
             </div>
@@ -331,7 +331,7 @@
     </div>
 </section>
 
-<section class="facts-area">
+<section id="facts" class="facts-area">
     <div class="facts-area-bg" style="background-image: url(assets/images/backgrounds/facts-area-bg.jpg);">
     </div>
     <div class="container">
