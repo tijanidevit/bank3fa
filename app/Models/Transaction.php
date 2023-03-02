@@ -24,11 +24,11 @@ class Transaction extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function onlyCredit($query)
+    public function scopeOnlyCredit($query)
     {
         $query->where('type', TransactionType::CREDIT);
     }
-    public function onlyDebit($query)
+    public function scopeOnlyDebit($query)
     {
         $query->where('type', TransactionType::DEBIT);
     }

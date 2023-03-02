@@ -54,4 +54,10 @@ Route::group(['middleware' => ['auth.user','verify.user','pin.user','userNotQues
 Route::group(['middleware' => ['auth.user','verify.user','pin.user','question.user']], function ()
 {
     Route::get('dashboard', [DashboardController::class, 'dashboardPage'])->name('dashboard');
+    Route::get('transactions', [DashboardController::class, 'transactionsPage'])->name('transactions');
+    Route::get('fund-wallet', [DashboardController::class, 'transactionsPage'])->name('fundWallet');
+    Route::post('fund-wallet', [DashboardController::class, 'transactionsPage'])->name('fundWalletAction');
+
+    Route::get('transfer', [DashboardController::class, 'transactionsPage'])->name('transfer');
+    Route::post('transfer', [DashboardController::class, 'transactionsPage'])->name('transferAction');
 });

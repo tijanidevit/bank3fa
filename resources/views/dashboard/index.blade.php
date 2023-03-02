@@ -39,24 +39,84 @@
             </div>
         </div>
         <div class="row container">
-            <div class="col-xl-6">
+            <div class="col-xl-12">
                 <div class="overview-content-box-two">
                     <div class="inner-title my-2">
                         <h5>Credit Transactions</h5>
                     </div>
                     <table class="table table-striped">
-                        <tr>
-                            <th>Sender</th>
-                            <th>Amount</th>
-                            <th>Balance Before</th>
-                            <th>Balance After</th>
-                            <th>Date</th>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <th>Amount</th>
+                                <th>Balance Before</th>
+                                <th>Balance After</th>
+                                <th>Remark</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @forelse ($data['creditTransactions'] as $transaction)
+                                <tr>
+                                    <th>{!! formatAmount($transaction->amount) !!}</th>
+                                    <th>{!! formatAmount($transaction->balance_before) !!}</th>
+                                    <th>{!! formatAmount($transaction->balance_after) !!}</th>
+                                    <th>{{ $transaction->remark }}</th>
+                                    <th>{{ formatDate($transaction->created_at) }}</th>
+                                </tr>
+                            @empty
+                            <tr>
+                                <td colspan="5">You have not made any credit transaction</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
                     </table>
                 </div>
+
+                @if (count($data['creditTransactions']) == 5)
+                    <a href="{{ route('transactions') }}" class="d-flex justify-content-end">View more</a>
+                @endif
             </div>
 
 
+            <div class="col-xl-12 my-5">
+                <div class="overview-content-box-two">
+                    <div class="inner-title my-2">
+                        <h5 class="text-success">Debit Transactions</h5>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Amount</th>
+                                <th>Balance Before</th>
+                                <th>Balance After</th>
+                                <th>Remark</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @forelse ($data['debitTransactions'] as $transaction)
+                                <tr>
+                                    <th>{!! formatAmount($transaction->amount) !!}</th>
+                                    <th>{!! formatAmount($transaction->balance_before) !!}</th>
+                                    <th>{!! formatAmount($transaction->balance_after) !!}</th>
+                                    <th>{{ $transaction->remark }}</th>
+                                    <th>{{ formatDate($transaction->created_at) }}</th>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5">You have not made any debit transaction</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                @if (count($data['creditTransactions']) == 5)
+                    <a href="{{ route('transactions') }}" class="d-flex justify-content-end">View more</a>
+                @endif
+            </div>
         </div>
     </div>
 </section>

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Transaction;
 use Illuminate\Foundation\Auth\User as AuthUser;
 
 /**
@@ -25,12 +26,12 @@ class DashboardService
 
     public function fetchUserCreditTransactions()
     {
-        return $this->user->transactions()->onlyCredit()->orderBy('id','DESC')->limit(5);
+        return $this->user->transactions()->onlyCredit()->orderBy('id','DESC')->limit(5)->get();
     }
 
     public function fetchUserDebitTransactions()
     {
-        return $this->user->transactions()->onlyDebit()->orderBy('id','DESC')->limit(5);
+        return $this->user->transactions()->onlyDebit()->orderBy('id','DESC')->limit(5)->get();
     }
 
     public function getUserWallet()
