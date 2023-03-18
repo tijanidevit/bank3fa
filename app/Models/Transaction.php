@@ -19,6 +19,15 @@ class Transaction extends Model
         'type',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('order', function ($query) {
+            $query->orderBy('id', 'desc');
+        });
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

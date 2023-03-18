@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Transaction;
 use Illuminate\Foundation\Auth\User as AuthUser;
 
 /**
