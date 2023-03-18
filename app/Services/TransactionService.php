@@ -2,17 +2,16 @@
 
 namespace App\Services;
 
-use Illuminate\Foundation\Auth\User as AuthUser;
+use App\Enums\TransactionType;
+use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class TransactionService.
  */
 class TransactionService
 {
-    protected AuthUser $user;
-
-    public function __construct(AuthUser $user) {
-        $this->user = $user;
+    public function __construct(protected User $user) {
     }
     public function fetchLimitedUserCreditTransactions(int $limit)
     {
@@ -24,8 +23,33 @@ class TransactionService
         return $this->user->transactions()->onlyDebit()->limit($limit)->get();
     }
 
-    public function fetchPaginatedUserTransactions(string $type = null, )
+    public function fetchPaginatedUserTransactions()
     {
-        return $this->user->transactions()->onlyCredit()->limit($limit)->get();
+        return $this->user->transactions()->onlyCredit()->paginate();
     }
+
+    public function saveCreditTransaction($data)
+    {
+        DB::transaction(function () use ($data)
+        {
+            $user = auth()->user();
+            extract($data);
+            $balance_before = $user->wallet->balance;
+            $balance_after = $balance_before + $amount;
+            $remark = "Wallet Funding of &#8358;". number_format($amount,2);
+            $user->transactions()->create([
+                'amount' => $amount,
+                'balance_before' => $balance_before,
+                'balance_after' => $balance_after,
+                'remark' => $remark,
+                'type' => TransactionType::CREDIT
+            ]);
+
+            $user->wallet()->update([
+                'balance' => $balance_after
+            ]);
+        });
+    }
+
+
 }

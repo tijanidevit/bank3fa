@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UserWalletController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,7 +30,7 @@ Route::group(['middleware' => 'userNotAuth'], function ()
     Route::post('login', [AuthController::class, 'login'])->name('loginAction');
 });
 
-Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::group(['middleware' => ['auth.user','userNotVerified']], function ()
 {
@@ -51,13 +53,15 @@ Route::group(['middleware' => ['auth.user','verify.user','pin.user','userNotQues
 
 
 
-Route::group(['middleware' => ['auth.user','verify.user','pin.user','question.user']], function ()
+Route::group(['middleware' => ['web','auth.user','verify.user','pin.user','question.user']], function ()
 {
     Route::get('dashboard', [DashboardController::class, 'dashboardPage'])->name('dashboard');
-    Route::get('transactions', [DashboardController::class, 'transactionsPage'])->name('transactions');
-    Route::get('fund-wallet', [DashboardController::class, 'transactionsPage'])->name('fundWallet');
-    Route::post('fund-wallet', [DashboardController::class, 'transactionsPage'])->name('fundWalletAction');
 
-    Route::get('transfer', [DashboardController::class, 'transactionsPage'])->name('transfer');
-    Route::post('transfer', [DashboardController::class, 'transactionsPage'])->name('transferAction');
+    Route::get('transactions', [TransactionController::class, 'transactionsPage'])->name('transactions');
+    Route::get('fund-wallet', [TransactionController::class, 'fundWalletPage'])->name('fundWallet');
+    Route::post('fund-walletA', [TransactionController::class, 'fundWalletAction'])->name('fundWalletAction');
+
+    Route::get('transfer', [TransactionController::class, 'transactionsPage'])->name('transfer');
+    Route::post('transfer', [TransactionController::class, 'transactionsPage'])->name('transferAction');
+
 });

@@ -21,3 +21,5 @@
     </a>
 </body>
 @include('layout.partials.scripts')
+
+@yield('extra-scripts')

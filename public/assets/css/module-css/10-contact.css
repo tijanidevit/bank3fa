@@ -224,6 +224,7 @@
 
 .contact-form form input[type="text"],
 .contact-form form input[type="email"],
+.contact-form form input[type="number"],
 .contact-form form input[type="password"],
 .contact-form form textarea {
     position: relative;
@@ -245,6 +246,7 @@
 
 .contact-form form input[type="text"]:focus,
 .contact-form form input[type="email"]:focus,
+.contact-form form input[type="number"]:focus,
 .contact-form form textarea:focus {
     border: 1px solid var(--thm-base);
     outline: none;

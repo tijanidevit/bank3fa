@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('title')
-    Verify OTP
+    Dashboard
 @endsection
 
 @section('body')
@@ -19,8 +19,7 @@
                     <div class="breadcrumb-menu" data-aos="fade-left" data-aos-easing="linear"
                         data-aos-duration="500">
                         <ul>
-                            <li><a href="Dashboard">Home</a></li>
-                            {{-- <li class="active">Salary Account</li> --}}
+                            <li><a href="{{ route('dashboard') }}">Home</a></li>
                         </ul>
                     </div>
                 </div>
@@ -29,6 +28,7 @@
     </div>
 </section>
 <!--End breadcrumb area-->
+
 
 <section class="overview-area">
     <div class="container">
@@ -42,7 +42,7 @@
             <div class="col-xl-12">
                 <div class="overview-content-box-two">
                     <div class="inner-title my-2">
-                        <h5>Credit Transactions</h5>
+                        <a href="{{ route('transactions') }}"><h5 class="text-success">Credit Transactions</h5></a>
                     </div>
                     <table class="table table-striped">
                         <thead>
@@ -61,7 +61,7 @@
                                     <th>{!! formatAmount($transaction->amount) !!}</th>
                                     <th>{!! formatAmount($transaction->balance_before) !!}</th>
                                     <th>{!! formatAmount($transaction->balance_after) !!}</th>
-                                    <th>{{ $transaction->remark }}</th>
+                                    <th>{!! $transaction->remark !!}</th>
                                     <th>{{ formatDate($transaction->created_at) }}</th>
                                 </tr>
                             @empty
@@ -82,7 +82,7 @@
             <div class="col-xl-12 my-5">
                 <div class="overview-content-box-two">
                     <div class="inner-title my-2">
-                        <h5 class="text-success">Debit Transactions</h5>
+                        <a href="{{ route('transactions') }}"><h5>Debit Transactions</h5></a>
                     </div>
                     <table class="table table-striped">
                         <thead>
@@ -101,7 +101,7 @@
                                     <th>{!! formatAmount($transaction->amount) !!}</th>
                                     <th>{!! formatAmount($transaction->balance_before) !!}</th>
                                     <th>{!! formatAmount($transaction->balance_after) !!}</th>
-                                    <th>{{ $transaction->remark }}</th>
+                                    <th>{!! $transaction->remark !!}</th>
                                     <th>{{ formatDate($transaction->created_at) }}</th>
                                 </tr>
                             @empty

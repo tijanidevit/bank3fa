@@ -46,13 +46,19 @@
                                         <a href="{{ route('dashboard') }}">Dashboard</a>
                                     </li>
                                     <li class="">
-                                        <a href="#send-funds">Send Funds</a>
+                                        <a href="{{ route('fundWallet') }}">Fund Wallet</a>
                                     </li>
                                     <li class="">
-                                        <a href="r">Transactions</a>
+                                        <a href="{{ route('transfer') }}">Transfer Funds</a>
                                     </li>
                                     <li class="">
-                                        <a href="logout" class="btn text-white btn-success"> Logout</a>
+                                        <a href="{{ route('transactions') }}">Transactions</a>
+                                    </li>
+                                    <li class="">
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button class="btn text-white btn-danger"> Logout</button>
+                                        </form>
                                     </li>
                                 </ul>
                             @endif
