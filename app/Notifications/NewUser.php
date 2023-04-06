@@ -42,7 +42,7 @@ class NewUser extends Notification
                 ->subject("Email Verification")
                 ->greeting("Hello Dear {$this->user->fullname}")
                 ->line($message)
-                ->action('Go to verification page', url('/email-verification'))
+                ->action('Go to verification page', route('verifyEmail'))
                 ->line('Thank you for using our application!');
     }
 

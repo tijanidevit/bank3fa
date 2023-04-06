@@ -7,7 +7,7 @@ use App\Notifications\NewUser;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class SendVerificationNotification
+class SendVerificationNotification implements ShouldQueue
 {
     /**
      * Create the event listener.
