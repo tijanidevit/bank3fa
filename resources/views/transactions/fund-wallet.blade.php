@@ -65,7 +65,7 @@
                             <input id="form_botcheck" name="form_botcheck" class="form-control" type="hidden"
                                 value="">
 
-                                {{-- <script src="https://api.ravepay.co/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script> --}}
+                                <script src="https://api.ravepay.co/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
                             <button class="btn-one" id="payment-bt" type="submit" data-loading-text="Please wait...">
                                 <span class="txt">
                                     Fund Wallet
@@ -97,14 +97,14 @@
         $('#fundWallet').submit(function(e){
             e.preventDefault();
             handlePaymentResponse();
-            // processPayment();
+            processPayment();
         })
 
-        // $('#payment-btn').click(function(e){
-        //     e.preventDefault();
-        //     handlePaymentResponse();
-        //     // processPayment();
-        // })
+        $('#payment-btn').click(function(e){
+            e.preventDefault();
+            handlePaymentResponse();
+            processPayment();
+        })
 
         const processPayment = () =>{
             const n = new Date();
