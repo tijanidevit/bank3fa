@@ -22,8 +22,7 @@ class TransactionController extends Controller
     public function fundWalletApi(FundWalletRequest $request)
     {
         try {
-            return $this->successResponse('success', [auth()->user(),111]);
-            $data = $this->transactionService->saveCreditTransaction($request->validated());
+            $this->transactionService->saveCreditTransaction($request->validated());
             return $this->successResponse('success', auth()->user());
         } catch (\Exception $ex) {
             return $this->errorResponse($ex->getMessage());
@@ -37,6 +36,16 @@ class TransactionController extends Controller
             $this->transactionService->saveCreditTransaction($request->validated());
             return $this->successResponse("Wallet Successfully funded");
 
+        } catch (\Exception $ex) {
+            return $this->errorResponse($ex->getMessage());
+        }
+    }
+
+    public function fetchAllUserTransactions()
+    {
+        try {
+            $transactions = $this->transactionService->fetchAllUserTransactions();
+            return view('transactions.transactions', compact('transactions'));
         } catch (\Exception $ex) {
             return $this->errorResponse($ex->getMessage());
         }

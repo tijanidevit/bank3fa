@@ -52,4 +52,5 @@
         <link rel="stylesheet" href="assets/css/color-1.css">
         <link rel="stylesheet" href="assets/css/responsive.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"/>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 </head>

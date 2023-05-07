@@ -23,9 +23,9 @@ class TransactionService
         return $this->user->transactions()->onlyDebit()->limit($limit)->get();
     }
 
-    public function fetchPaginatedUserTransactions()
+    public function fetchAllUserTransactions()
     {
-        return $this->user->transactions()->onlyCredit()->paginate();
+        return auth()->user()->transactions;
     }
 
     public function saveCreditTransaction($data)

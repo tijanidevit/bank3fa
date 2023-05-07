@@ -19,6 +19,6 @@
 <script src="{{ asset('assets/vendors/wow/wow.js') }}"></script>
 <script src="{{ asset('assets/vendors/extra-scripts/jquery.paroller.min.js') }}"></script>
 <script src="{{ asset('assets/vendors/language-switcher/jquery.polyglot.language.switcher.js') }}"></script>
-
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <!-- Template js -->
 <script src="{{ asset('assets/js/custom.js') }}"></script>

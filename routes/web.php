@@ -57,7 +57,7 @@ Route::group(['middleware' => ['web','auth.user','verify.user','pin.user','quest
 {
     Route::get('dashboard', [DashboardController::class, 'dashboardPage'])->name('dashboard');
 
-    Route::get('transactions', [TransactionController::class, 'transactionsPage'])->name('transactions');
+    Route::get('transactions', [TransactionController::class, 'fetchAllUserTransactions'])->name('transactions');
     Route::get('fund-wallet', [TransactionController::class, 'fundWalletPage'])->name('fundWallet');
     Route::post('fund-wallet', [TransactionController::class, 'fundWalletAction'])->name('fundWalletAction');
 
