@@ -47,7 +47,7 @@
                 <div class="contact-form" style="background-color: #f5f8f7;">
                     <form id="fundWallet" action="" class="default-form2"  method="post">
                         @csrf
-                        <div>
+                        <div id="response">
                             @if (session('error'))
                                 <p class="text-danger">{{ session('error') }}</p>
                             @endif
@@ -96,13 +96,6 @@
 
         $('#fundWallet').submit(function(e){
             e.preventDefault();
-            handlePaymentResponse();
-            processPayment();
-        })
-
-        $('#payment-btn').click(function(e){
-            e.preventDefault();
-            handlePaymentResponse();
             processPayment();
         })
 
@@ -144,10 +137,11 @@
                     amount : $('#amount').val()
                 },
                 success: function(data){
-                    console.log(data);
+                    $('#response').append(`<p class="text-success">${data.message}</p>`)
+                    $('#amount').val("");
                 },
                 error: function(data){
-                    console.log(data);
+                    $('#response').append(`<p class="text-warning">${data.message}</p>`)
                 }
             })
         }

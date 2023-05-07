@@ -34,7 +34,8 @@ class TransactionController extends Controller
     public function fundWalletAction(FundWalletRequest $request)
     {
         try {
-            $data = $this->transactionService->saveCreditTransaction($request->validated());
+            $this->transactionService->saveCreditTransaction($request->validated());
+            return $this->successResponse("Wallet Successfully funded");
 
         } catch (\Exception $ex) {
             return $this->errorResponse($ex->getMessage());
