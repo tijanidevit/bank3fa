@@ -59,6 +59,8 @@
                                 <input type="number" required value="{{ old('amount') }}" name="amount" id="amount" placeholder="2000" >
                                 {!!  requestError($errors,'amount')  !!}
                             </div>
+
+                            <input type="hidden" id="email" value="{{ auth()->user()->email }}">
                         </div>
 
                         <div class="button-box">
@@ -92,8 +94,8 @@
     e.preventDefault();
 
     let handler = PaystackPop.setup({
-        key: 'pk_test_71cab4c3994c0566da9af308afef95397fd92dbf', // Replace with your public key
-        email: 'thenewxpat@gmail.com',
+        key: "{{ config('services.paystack.test_key') }}", // Replace with your public key
+        email: "{{ auth()->user()->email }}",
         amount: document.getElementById("amount").value * 100,
         ref: 'FB'+Math.floor((Math.random() * 1000000000) + 1),
         // label: "Optional string that replaces customer email"
@@ -101,13 +103,36 @@
         alert('Window closed.');
         },
         callback: function(response){
-        let message = 'Payment complete! Reference: ' + response.reference;
-        alert(message);
+        // let message = 'Payment complete! Reference: ' + response.reference;
+        // alert(message);
+        handlePaymentResponse();
         }
     });
 
     handler.openIframe();
 
+        }
+
+        const handlePaymentResponse = () => {
+            // $('#payment-btn').attr('disabled', 'disabled').text("Processing...");
+            $.ajax({
+                url:'{{ route('fundWalletAction') }}',
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                // headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                data : {
+                    amount : $('#amount').val()
+                },
+                success: function(data){
+                    $('#response').append(`<p class="text-success">${data.message}</p>`)
+                    $('#amount').val("");
+                },
+                error: function(data){
+                    $('#response').append(`<p class="text-warning">${data.message}</p>`)
+                }
+            })
         }
 </script>
 @endsection
