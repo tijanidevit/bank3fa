@@ -45,7 +45,7 @@
 
             <div class="col-md-6">
                 <div class="contact-form" style="background-color: #f5f8f7;">
-                    <form id="fundWallet" action="" class="default-form2"  method="post">
+                    <form class="default-form2" id="paymentForm"  method="post">
                         @csrf
                         <div id="response">
                             @if (session('error'))
@@ -62,11 +62,9 @@
                         </div>
 
                         <div class="button-box">
-                            <input id="form_botcheck" name="form_botcheck" class="form-control" type="hidden"
-                                value="">
+                            <input id="form_botcheck" name="form_botcheck" class="form-control" type="hidden" value="">
 
-                                <script src="https://api.ravepay.co/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
-                            <button class="btn-one" id="payment-bt" type="submit" data-loading-text="Please wait...">
+                            <button class="btn-one" id="payment-bt" data-loading-text="Please wait...">
                                 <span class="txt">
                                     Fund Wallet
                                 </span>
@@ -84,67 +82,32 @@
 
 
 @section('extra-scripts')
-<script type="text/javascript">
-    $(function(){
-        var amount = 0;
 
-        const API_FLUTTERWAVE_PK = 'FLWPUBK_TEST-5da56828cb5048d85e4216fe4d46ffa6-X',
-            customerEmail = "{{ auth()->user()->email }}",
-            customerPhone = '09090809809',
-            customerFName = 'Wasiu Alade',
-            customerLName = 'a';
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script>
+    const paymentForm = document.getElementById('paymentForm');
+    paymentForm.addEventListener("submit", payWithPaystack, false);
+    console.log('paymentForm', paymentForm)
+    function payWithPaystack(e) {
+    e.preventDefault();
 
-        $('#fundWallet').submit(function(e){
-            e.preventDefault();
-            processPayment();
-        })
-
-        const processPayment = () =>{
-            const n = new Date();
-            var t =
-                "FIN-C" +
-                n.getFullYear().toString() +
-                n.getMonth().toString() +
-                n.getMilliseconds().toString() +
-                Math.floor(1).toString(),
-                o = getpaidSetup({
-                    PBFPubKey: API_FLUTTERWAVE_PK,
-                    customer_email: customerEmail,
-                    amount: Number($('#amount').val()),
-                    customer_phone: customerPhone,
-                    customer_firstname: customerFName,
-                    customer_lastname: customerLName,
-                    currency: "NGN",
-                    country: "NG",
-                    txref: t,
-                    onclose: function() {},
-                    callback: function(e) {
-                        handlePaymentResponse(e.data.tx), o.close();
-                    }
-                });
-        }
-
-        const handlePaymentResponse = () => {
-            // $('#payment-btn').attr('disabled', 'disabled').text("Processing...");
-            $.ajax({
-                url:'{{ route('fundWalletAction') }}',
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                // headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                data : {
-                    amount : $('#amount').val()
-                },
-                success: function(data){
-                    $('#response').append(`<p class="text-success">${data.message}</p>`)
-                    $('#amount').val("");
-                },
-                error: function(data){
-                    $('#response').append(`<p class="text-warning">${data.message}</p>`)
-                }
-            })
+    let handler = PaystackPop.setup({
+        key: 'pk_test_71cab4c3994c0566da9af308afef95397fd92dbf', // Replace with your public key
+        email: 'thenewxpat@gmail.com',
+        amount: document.getElementById("amount").value * 100,
+        ref: 'FB'+Math.floor((Math.random() * 1000000000) + 1),
+        // label: "Optional string that replaces customer email"
+        onClose: function(){
+        alert('Window closed.');
+        },
+        callback: function(response){
+        let message = 'Payment complete! Reference: ' + response.reference;
+        alert(message);
         }
     });
+
+    handler.openIframe();
+
+        }
 </script>
 @endsection
