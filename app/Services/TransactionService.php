@@ -7,6 +7,7 @@ use App\Models\UserWallet;
 use App\Enums\TransactionType;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\User;
+use App\Notifications\TransferNotification;
 
 /**
  * Class TransactionService.
@@ -63,6 +64,7 @@ class TransactionService
         //Save the debit transaction
         $debitRemark = "$amountWithNaira transferred to $receiverName ($accountNumber - $bankName)";
         $this->saveTransaction(auth()->user(), $amount * -1, $debitRemark, TransactionType::DEBIT);
+
     }
 
 
@@ -83,6 +85,8 @@ class TransactionService
             $user->wallet()->update([
                 'balance' => $balance_after
             ]);
+
+            $user->notify(new TransferNotification($remark, $amount));
         });
     }
 
