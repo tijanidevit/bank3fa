@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\FundWalletRequest;
+use App\Http\Requests\User\TransferFundRequest;
 use App\Services\BankService;
 use App\Services\TransactionService;
 use App\Traits\ResponseTrait;
@@ -27,11 +28,11 @@ class TransactionController extends Controller
     }
 
 
-    public function transferFundAction(FundWalletRequest $request)
+    public function transferFundAction(TransferFundRequest $request)
     {
         try {
-            $this->transactionService->saveCreditTransaction($request->validated());
-            return $this->successResponse("Wallet Successfully funded");
+            $this->transactionService->transferFund($request->validated());
+            return $this->successResponse("Transfer Completed");
 
         } catch (\Exception $ex) {
             return $this->errorResponse($ex->getMessage());
@@ -42,7 +43,9 @@ class TransactionController extends Controller
     public function fundWalletAction(FundWalletRequest $request)
     {
         try {
-            $this->transactionService->saveCreditTransaction($request->validated());
+            $data = $request->validated();
+            $data['remark'] = "Wallet Funding of &#8358;". number_format($data['amount'],2);
+            $this->transactionService->fundWallet($data);
             return $this->successResponse("Wallet Successfully funded");
 
         } catch (\Exception $ex) {

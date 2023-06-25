@@ -45,61 +45,60 @@
 
             <div class="col-md-6">
                 <div class="contact-form" style="background-color: #f5f8f7;">
-                    <form class="default-form2" id="transferForm"  method="post">
+                    <form class="default-form2" id="transferForm" method="post">
                         @csrf
+
                         <div id="response">
-                            @if (session('error'))
-                                <p class="text-danger">{{ session('error') }}</p>
-                            @endif
                         </div>
+                        <div id="accountArea">
+                            <div class="form-group">
+                                <label>Bank</label>
+                                <div class="input-box">
+                                    <select required name="bank_code" id="bankCode">
+                                        @forelse ($banks as $bank)
+                                            <option value="{{ $bank->code }}">{{ $bank->name }}</option>
+                                        @empty
+                                            <option disabled>No banks available at the moment</option>
+                                        @endforelse
+                                    </select>
+                                    {!!  requestError($errors,'amount')  !!}
+                                </div>
+                            </div>
 
-                        <div class="form-group">
-                            <label>Bank</label>
-                            <div class="input-box">
-                                <select required name="bank_code" id="bankCode">
-                                    @forelse ($banks as $bank)
-                                        <option value="{{ $bank->code }}">{{ $bank->name }}</option>
-                                    @empty
-                                        <option disabled>No banks available at the moment</option>
-                                    @endforelse
-                                </select>
-                                {!!  requestError($errors,'amount')  !!}
+                            <div class="form-group">
+                                <label>Account number</label>
+                                <div class="input-box">
+                                    <input type="number" required value="{{ old('account_number') }}" name="account_number" id="accountNumber" placeholder="2000" >
+                                    {!!  requestError($errors,'account_number')  !!}
+                                </div>
+                                <small class="text-bold" id="accountName"></small>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Amount</label>
+                                <div class="input-box">
+                                    <input type="number" min="100" required value="{{ old('amount') }}" name="amount" id="amount" placeholder="2000" >
+                                    {!!  requestError($errors,'amount')  !!}
+                                </div>
+
+                                <input type="hidden" id="email" value="{{ auth()->user()->email }}">
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label>Account number</label>
-                            <div class="input-box">
-                                <input type="number" onchange="resolveAccount" minlength="10" required value="{{ old('account_number') }}" name="account_number" id="accountNumber" placeholder="2000" >
-                                {!!  requestError($errors,'account_number')  !!}
+                        <div id="SecurityArea">
+                            <div class="button-box">
+                                <input id="form_botcheck" name="form_botcheck" class="form-control" type="hidden" value="">
+
+                                <button class="btn-one" id="payment-bt" data-loading-text="Please wait...">
+                                    <span class="txt">
+                                        Transfer Fund
+                                    </span>
+                                </button>
                             </div>
-                            <small class="text-bold" id="accountName"></small>
                         </div>
-
-                        <div class="form-group">
-                            <label>Amount</label>
-                            <div class="input-box">
-                                <input type="number" required value="{{ old('amount') }}" name="amount" id="amount" placeholder="2000" >
-                                {!!  requestError($errors,'amount')  !!}
-                            </div>
-
-                            <input type="hidden" id="email" value="{{ auth()->user()->email }}">
-                        </div>
-
-                        <div class="button-box">
-                            <input id="form_botcheck" name="form_botcheck" class="form-control" type="hidden" value="">
-
-                            <button class="btn-one" id="payment-bt" data-loading-text="Please wait...">
-                                <span class="txt">
-                                    Transfer Fund
-                                </span>
-                            </button>
-                        </div>
-
                     </form>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
@@ -111,21 +110,29 @@
 <script src="https://js.paystack.co/v1/inline.js"></script>
 <script>
 
-    $('#accountNumber').change(function(){
-        resolveAccount();
+    $('#accountNumber').change(() =>{
+        resolveAccount()
     })
 
+    $('#bankCode').change(() =>{
+        if ($('#accountNumber').val() != "") {
+            resolveAccount()
+        }
+    })
+
+    var canTransfer = false
+
     const resolveAccount = () => {
-        $('#accountName').text('')
-        $('#accountName').hide()
+        canTransfer = false
+        $('#accountName').text('Verifying account...')
         $.ajax({
+            'async': false,
             url:'{{ route('resolveAccount') }}',
             type: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            // headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
             data : {
                 account_number : $('#accountNumber').val(),
                 bank_code : $('#bankCode').val()
@@ -133,21 +140,53 @@
             success: function(data){
                 if (data.status) {
                     $('#accountName').text(data.data)
+                    $('#accountName').removeClass('text-danger')
                     $('#accountName').addClass('text-success')
+                    canTransfer = true
                 }
                 else{
                     $('#accountName').text(data.message)
+                    $('#accountName').removeClass('text-success')
                     $('#accountName').addClass('text-danger')
+                    canTransfer = false
                 }
-
-                $('#accountName').show()
             },
             error: function(err){
                 $('#accountName').text(`${err.responseJSON.message}`)
-                $('#accountName').show()
+                canTransfer = false
             }
         })
     }
+
+    $('#transferForm').submit((e) =>{
+        e.preventDefault();
+        if (!canTransfer) {
+            return false
+        }
+        $.ajax({
+            url:'{{ route('transferAction') }}',
+            type: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data : {
+                account_number : $('#accountNumber').val(),
+                bank_code : $('#bankCode').val(),
+                amount: $('#amount').val(),
+                account_name: $('#accountName').text(),
+            },
+            success: function(data){
+                console.log('data', data)
+                $('#response').html(`<p class="text-success">${data.message}</p>`)
+                $('#amount').val("");
+            },
+            error: function(err){
+                $('#response').html(`<p class="text-success">${err.responseJSON.message}</p>`)
+            }
+        })
+
+    })
 
 </script>
 @endsection

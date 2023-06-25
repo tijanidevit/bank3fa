@@ -56,7 +56,7 @@
                         <div class="form-group">
                             <label>Amount</label>
                             <div class="input-box">
-                                <input type="number" required value="{{ old('amount') }}" name="amount" id="amount" placeholder="2000" >
+                                <input min="100" type="number" required value="{{ old('amount') }}" name="amount" id="amount" placeholder="2000" >
                                 {!!  requestError($errors,'amount')  !!}
                             </div>
 

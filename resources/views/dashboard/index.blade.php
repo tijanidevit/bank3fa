@@ -44,7 +44,7 @@
                     <div class="inner-title my-2">
                         <a href="{{ route('transactions') }}"><h5 class="text-success">Credit Transactions</h5></a>
                     </div>
-                    <table class="table table-striped">
+                    <table class="table table-striped table-responsive">
                         <thead>
                             <tr>
                                 <th>Amount</th>
@@ -84,7 +84,7 @@
                     <div class="inner-title my-2">
                         <a href="{{ route('transactions') }}"><h5>Debit Transactions</h5></a>
                     </div>
-                    <table class="table table-striped">
+                    <table class="table table-striped table-responsive">
                         <thead>
                             <tr>
                                 <th>Amount</th>

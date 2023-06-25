@@ -20,7 +20,7 @@ class BankController extends Controller
             $data = $this->bankService->resolveAccountNumber($request->validated());
             return $this->successResponse("Bank resolved successfully",$data);
         } catch (Exception $ex) {
-            return $this->errorResponse($ex->getMessage());
+            return $this->errorResponse($ex->getMessage(),200);
         }
     }
 }

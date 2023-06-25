@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\User;
 
-use App\Traits\ResponseTrait;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
-class FundWalletRequest extends FormRequest
+class TransferFundRequest extends FormRequest
 {
-    use ResponseTrait;
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -26,13 +23,17 @@ class FundWalletRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'amount' => 'required|numeric|min:100'
+            'bank_code' => ['required','exists:banks,code'],
+            'account_number' => ['required'],
+            'amount' => ['required'],
+            'account_name' => ['required','string'],
         ];
     }
 
-    public function failedValidation(Validator $validator)
+    public function messages():array
     {
-        $error = $validator->errors()->first();
-        throw new HttpResponseException($this->errorResponse($error, 422));
+        return [
+            'bank.exists' => 'Bank not found',
+        ];
     }
 }

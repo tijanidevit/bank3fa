@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Bank;
+use App\Models\UserWallet;
 use App\Utils\PaystackUtil;
 use Exception;
 use Illuminate\Support\Facades\Http;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Http;
 class BankService
 {
 
-    public function __construct(protected Bank $bank) {
+    public function __construct(protected Bank $bank, protected UserWallet $userWallet) {
     }
 
     function getActiveBanks() {
@@ -23,6 +24,17 @@ class BankService
     function resolveAccountNumber(array $data) {
         $bankCode = $data['bank_code'];
         $accountNumber = $data['account_number'];
+
+        if ($bankCode == "FBN000") {
+            $account = $this->userWallet->with('user')->whereAccountNumber($accountNumber)->first();
+            if ($account) {
+                if($account->user->id != auth()->id()){
+                    return $account->user?->fullname;
+                }
+                throw new Exception('You cannot transfer funds to your own account');
+            }
+            throw new Exception('Account not found');
+        }
 
         $curl = curl_init();
 

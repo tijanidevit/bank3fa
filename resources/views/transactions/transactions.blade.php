@@ -53,7 +53,10 @@
                         <tbody>
                             @forelse ($transactions as $transaction)
                                 <tr>
-                                    <th>{!! formatAmount($transaction->amount) !!}</th>
+                                    <th @class([
+                                        'text-danger' => $transaction->amount < 0,
+                                        'text-success' => $transaction->amount > -1,
+                                    ]) >{!! formatAmount($transaction->amount) !!}</th>
                                     <th>{!! formatAmount($transaction->balance_before) !!}</th>
                                     <th>{!! formatAmount($transaction->balance_after) !!}</th>
                                     <th>{!! $transaction->remark !!}</th>
@@ -76,6 +79,10 @@
 
 @section('extra-scripts')
 <script>
-    let table = new DataTable('#myTable');
+    $(document).ready(function() {
+        $('#myTable').DataTable({
+            "order": []
+        });
+    });
 </script>
 @endsection
