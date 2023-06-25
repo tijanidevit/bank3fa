@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Bank;
+use App\Utils\PaystackUtil;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -29,10 +30,7 @@ class CreateBanksCommand extends Command
     {
         $this->info('Fetching banks from Paystack');
 
-        $banks = Http::withHeaders([
-            "Authorization: Bearer ". config('services.paystack.test_key'),
-            "Cache-Control: no-cache",
-        ])->get("https://api.paystack.co/bank?country=nigeria")['data'];
+        $banks = Http::withHeaders(PaystackUtil::getHeaders())->get("https://api.paystack.co/bank?country=nigeria")['data'];
 
 
         $this->info('Storing banks into DB');

@@ -34,9 +34,9 @@
 <section class="overview-area">
     <div class="container">
         <div class="sec-title text-center">
-            <h2>Fund your wallet</h2>
+            <h2>Transfer funds</h2>
             <div class="sub-title">
-                <p>Please enter the amount you want to fund your wallet with and follow the proceedure.</p>
+                <p>Please select the bank details and enter the amount you want to transfer.</p>
             </div>
         </div>
         <div class="row container">
@@ -45,12 +45,35 @@
 
             <div class="col-md-6">
                 <div class="contact-form" style="background-color: #f5f8f7;">
-                    <form class="default-form2" id="paymentForm"  method="post">
+                    <form class="default-form2" id="transferForm"  method="post">
                         @csrf
                         <div id="response">
                             @if (session('error'))
                                 <p class="text-danger">{{ session('error') }}</p>
                             @endif
+                        </div>
+
+                        <div class="form-group">
+                            <label>Bank</label>
+                            <div class="input-box">
+                                <select required name="bank_code" id="bankCode">
+                                    @forelse ($banks as $bank)
+                                        <option value="{{ $bank->code }}">{{ $bank->name }}</option>
+                                    @empty
+                                        <option disabled>No banks available at the moment</option>
+                                    @endforelse
+                                </select>
+                                {!!  requestError($errors,'amount')  !!}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Account number</label>
+                            <div class="input-box">
+                                <input type="number" onchange="resolveAccount" minlength="10" required value="{{ old('account_number') }}" name="account_number" id="accountNumber" placeholder="2000" >
+                                {!!  requestError($errors,'account_number')  !!}
+                            </div>
+                            <small class="text-bold" id="accountName"></small>
                         </div>
 
                         <div class="form-group">
@@ -87,52 +110,44 @@
 
 <script src="https://js.paystack.co/v1/inline.js"></script>
 <script>
-    const paymentForm = document.getElementById('paymentForm');
-    paymentForm.addEventListener("submit", payWithPaystack, false);
-    console.log('paymentForm', paymentForm)
-    function payWithPaystack(e) {
-    e.preventDefault();
 
-    let handler = PaystackPop.setup({
-        key: "{{ config('services.paystack.test_key') }}", // Replace with your public key
-        email: "{{ auth()->user()->email }}",
-        amount: document.getElementById("amount").value * 100,
-        ref: 'FB'+Math.floor((Math.random() * 1000000000) + 1),
-        // label: "Optional string that replaces customer email"
-        onClose: function(){
-        alert('Window closed.');
-        },
-        callback: function(response){
-        // let message = 'Payment complete! Reference: ' + response.reference;
-        // alert(message);
-        handlePaymentResponse();
-        }
-    });
+    $('#accountNumber').change(function(){
+        resolveAccount();
+    })
 
-    handler.openIframe();
-
-        }
-
-        const handlePaymentResponse = () => {
-            // $('#payment-btn').attr('disabled', 'disabled').text("Processing...");
-            $.ajax({
-                url:'{{ route('fundWalletAction') }}',
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                // headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                data : {
-                    amount : $('#amount').val()
-                },
-                success: function(data){
-                    $('#response').append(`<p class="text-success">${data.message}</p>`)
-                    $('#amount').val("");
-                },
-                error: function(data){
-                    $('#response').append(`<p class="text-warning">${data.message}</p>`)
+    const resolveAccount = () => {
+        $('#accountName').text('')
+        $('#accountName').hide()
+        $.ajax({
+            url:'{{ route('resolveAccount') }}',
+            type: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            // headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+            data : {
+                account_number : $('#accountNumber').val(),
+                bank_code : $('#bankCode').val()
+            },
+            success: function(data){
+                if (data.status) {
+                    $('#accountName').text(data.data)
+                    $('#accountName').addClass('text-success')
                 }
-            })
-        }
+                else{
+                    $('#accountName').text(data.message)
+                    $('#accountName').addClass('text-danger')
+                }
+
+                $('#accountName').show()
+            },
+            error: function(err){
+                $('#accountName').text(`${err.responseJSON.message}`)
+                $('#accountName').show()
+            }
+        })
+    }
+
 </script>
 @endsection

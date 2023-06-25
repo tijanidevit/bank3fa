@@ -89,7 +89,6 @@
 <script>
     const paymentForm = document.getElementById('paymentForm');
     paymentForm.addEventListener("submit", payWithPaystack, false);
-    console.log('paymentForm', paymentForm)
     function payWithPaystack(e) {
     e.preventDefault();
 
@@ -126,6 +125,7 @@
                     amount : $('#amount').val()
                 },
                 success: function(data){
+                    console.log('data', data)
                     $('#response').append(`<p class="text-success">${data.message}</p>`)
                     $('#amount').val("");
                 },

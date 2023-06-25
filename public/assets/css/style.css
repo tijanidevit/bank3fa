@@ -9812,6 +9812,7 @@ li.single-benefits-box-colum:nth-child(6) .single-benefits-box .icon {
 }
 
 #apply-form .form-group input[type="text"],
+select,
 #apply-form .form-group input[type="email"] {
   position: relative;
   display: block;

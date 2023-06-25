@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BankController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserWalletController;
@@ -61,7 +62,10 @@ Route::group(['middleware' => ['web','auth.user','verify.user','pin.user','quest
     Route::get('fund-wallet', [TransactionController::class, 'fundWalletPage'])->name('fundWallet');
     Route::post('fund-wallet', [TransactionController::class, 'fundWalletAction'])->name('fundWalletAction');
 
-    Route::get('transfer', [TransactionController::class, 'transactionsPage'])->name('transfer');
-    Route::post('transfer', [TransactionController::class, 'transactionsPage'])->name('transferAction');
+    Route::get('transfer', [TransactionController::class, 'transferFundPage'])->name('transfer');
+    Route::post('transfer', [TransactionController::class, 'transferFundAction'])->name('transferAction');
+
+
+    Route::post('account/resolve', [BankController::class, 'resolveAccount'])->name('resolveAccount');
 
 });

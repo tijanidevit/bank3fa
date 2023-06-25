@@ -9,4 +9,8 @@ class Bank extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+
+    function scopeOnlyActive($query) {
+        return $query->whereIsActive(1);
+    }
 }

@@ -33,6 +33,7 @@ return [
 
     'paystack' => [
         'test_key' => env('PAYSTACK_TEST_KEY'),
+        'test_secret_key' => env('PAYSTACK_TEST_SECRET_KEY'),
     ],
 
 ];
