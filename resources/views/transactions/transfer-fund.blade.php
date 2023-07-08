@@ -75,21 +75,60 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Amount</label>
+                                <div class="d-flex justify-content-between">
+                                    <label>Amount</label>
+                                    <small>Balance: <strong>{!! formatAmount(auth()->user()->wallet?->balance) !!}</strong></small>
+                                </div>
                                 <div class="input-box">
                                     <input type="number" min="100" required value="{{ old('amount') }}" name="amount" id="amount" placeholder="2000" >
                                     {!!  requestError($errors,'amount')  !!}
+
+                                    <small class="text-bold" id="balanceVerify"></small>
                                 </div>
 
                                 <input type="hidden" id="email" value="{{ auth()->user()->email }}">
                             </div>
+
+                            <div class="form-group d-flex justify-content-end">
+                                <button type="button" class="btn-one" id="btnNext">
+                                    <span class="txt">
+                                        Next
+                                    </span>
+                                </button>
+                            </div>
                         </div>
 
-                        <div id="SecurityArea">
-                            <div class="button-box">
-                                <input id="form_botcheck" name="form_botcheck" class="form-control" type="hidden" value="">
+                        {{-- style="display: none" --}}
+                        <div id="securityArea" >
+                            <div class="form-group">
+                                <label>Enter OTP sent to your email address</label>
+                                <div class="input-box">
+                                    <input type="text" required value="{{ old('otp') }}" name="otp" id="otp" placeholder="2000" >
+                                    {!!  requestError($errors,'otp')  !!}
+                                </div>
+                                <small class="text-bold" id="otpResponse"></small>
+                            </div>
 
-                                <button class="btn-one" id="payment-bt" data-loading-text="Please wait...">
+
+
+                            <div class="form-group">
+                                <label>{{ auth()->user()->question->question }}?</label>
+                                <div class="input-box">
+                                    <input type="text" required value="{{ old('otp') }}" name="otp" id="otp" placeholder="2000" >
+                                    {!!  requestError($errors,'otp')  !!}
+                                </div>
+                                <small class="text-bold" id="otpResponse"></small>
+                            </div>
+
+
+                            <div class="button-box">
+
+                                <button type="button" class="btn-one" id="btnBack">
+                                    <span class="txt">
+                                        Back
+                                    </span>
+                                </button>
+                                <button class="btn-one" id="payment-btn" data-loading-text="Please wait...">
                                     <span class="txt">
                                         Transfer Fund
                                     </span>
@@ -109,7 +148,7 @@
 
 <script src="https://js.paystack.co/v1/inline.js"></script>
 <script>
-
+    // $('#securityArea').hide()
     $('#accountNumber').change(() =>{
         resolveAccount()
     })
@@ -120,10 +159,11 @@
         }
     })
 
-    var canTransfer = false
+    var isAccountValid = false
+    var isBalanceEnough = false
 
     const resolveAccount = () => {
-        canTransfer = false
+        isAccountValid = false
         $('#accountName').text('Verifying account...')
         $.ajax({
             'async': false,
@@ -142,27 +182,62 @@
                     $('#accountName').text(data.data)
                     $('#accountName').removeClass('text-danger')
                     $('#accountName').addClass('text-success')
-                    canTransfer = true
+                    isAccountValid = true
                 }
                 else{
                     $('#accountName').text(data.message)
                     $('#accountName').removeClass('text-success')
                     $('#accountName').addClass('text-danger')
-                    canTransfer = false
+                    isAccountValid = false
                 }
             },
             error: function(err){
                 $('#accountName').text(`${err.responseJSON.message}`)
-                canTransfer = false
+                isAccountValid = false
+            }
+        })
+    }
+
+    const verifyAccountBalance = () => {
+        isBalanceEnough = false
+        $.ajax({
+            'async': false,
+            url:'{{ route('verifyAccountBalance') }}',
+            type: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data : {
+                amount : $('#amount').val()
+            },
+            success: function(data){
+                console.log('data', data)
+                if (data.status) {
+                    isBalanceEnough = true
+                }
+                else{
+                    $('#balanceVerify').text(data.message)
+                    // $('#balanceVerify').removeClass('text-success')
+                    $('#balanceVerify').addClass('text-danger')
+                    isBalanceEnough = false
+                }
+            },
+            error: function(err){
+                isBalanceEnough = false
             }
         })
     }
 
     $('#transferForm').submit((e) =>{
         e.preventDefault();
-        if (!canTransfer) {
+
+        if (!(isAccountValid && isBalanceEnough)) {
             return false
         }
+
+        $('#payment-btn').attr('disabled', 'disabled').text("Processing...");
+
         $.ajax({
             url:'{{ route('transferAction') }}',
             type: 'POST',
@@ -183,9 +258,27 @@
             },
             error: function(err){
                 $('#response').html(`<p class="text-success">${err.responseJSON.message}</p>`)
+            },
+            complete: function(data) {
+                $('#payment-btn').attr('disabled', 'false').text("Transfer Fund");
             }
         })
 
+    })
+
+    $('#btnBack').click(function(){
+        $('#securityArea').hide()
+        $('#accountArea').fadeIn()
+    })
+
+
+    $('#btnNext').click(function(){
+
+        verifyAccountBalance();
+        if (isAccountValid && isBalanceEnough) {
+            $('#accountArea').hide()
+            $('#securityArea').fadeIn()
+        }
     })
 
 </script>

@@ -63,6 +63,7 @@ Route::group(['middleware' => ['web','auth.user','verify.user','pin.user','quest
     Route::post('fund-wallet', [TransactionController::class, 'fundWalletAction'])->name('fundWalletAction');
 
     Route::get('transfer', [TransactionController::class, 'transferFundPage'])->name('transfer');
+    Route::post('verify-balance', [TransactionController::class, 'verifyAccountBalance'])->name('verifyAccountBalance');
     Route::post('transfer', [TransactionController::class, 'transferFundAction'])->name('transferAction');
 
 

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use App\Services\BankService;
+use App\Traits\ResponseTrait;
 use App\Http\Controllers\Controller;
+use App\Services\TransactionService;
 use App\Http\Requests\User\FundWalletRequest;
 use App\Http\Requests\User\TransferFundRequest;
-use App\Services\BankService;
-use App\Services\TransactionService;
-use App\Traits\ResponseTrait;
 
 class TransactionController extends Controller
 {
@@ -31,8 +32,25 @@ class TransactionController extends Controller
     public function transferFundAction(TransferFundRequest $request)
     {
         try {
+            if (!$this->transactionService->verifyBalance($request->amount)) {
+                return $this->errorResponse('Insufficient funds to complete this transfer');
+            }
             $this->transactionService->transferFund($request->validated());
             return $this->successResponse("Transfer Completed");
+
+        } catch (\Exception $ex) {
+            return $this->errorResponse($ex->getMessage());
+        }
+    }
+
+
+    public function verifyAccountBalance(Request $request)
+    {
+        try {
+            if (!$this->transactionService->verifyBalance($request->amount)) {
+                return $this->errorResponse('Insufficient funds to complete this transfer');
+            }
+            return $this->successResponse($this->transactionService->verifyBalance($request->amount));
 
         } catch (\Exception $ex) {
             return $this->errorResponse($ex->getMessage());

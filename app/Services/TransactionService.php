@@ -8,6 +8,8 @@ use App\Enums\TransactionType;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\User;
 use App\Notifications\TransferNotification;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class TransactionService.
@@ -67,6 +69,20 @@ class TransactionService
 
     }
 
+    public function verifyBalance($amount) {
+        if (auth()->user()->wallet->balance >= $amount) {
+            return true;
+        } else {
+            return false;
+        }
+
+        // try {
+        //     return auth()->user()->wallet->balance >= $amount;
+        // } catch (Exception $th) {
+        //     Log::error($th);
+        // }
+    }
+
 
     protected function saveTransaction($user,$amount,$remark,$type)
     {
@@ -86,7 +102,7 @@ class TransactionService
                 'balance' => $balance_after
             ]);
 
-            $user->notify(new TransferNotification($remark, $amount));
+            $user->notify(new TransferNotification(str_replace('&#8358','',$remark), $amount));
         });
     }
 

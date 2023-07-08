@@ -47,11 +47,6 @@
                 <div class="contact-form" style="background-color: #f5f8f7;">
                     <form class="default-form2" id="paymentForm"  method="post">
                         @csrf
-                        <div id="response">
-                            @if (session('error'))
-                                <p class="text-danger">{{ session('error') }}</p>
-                            @endif
-                        </div>
 
                         <div class="form-group">
                             <label>Amount</label>
@@ -64,9 +59,15 @@
                         </div>
 
                         <div class="button-box">
-                            <input id="form_botcheck" name="form_botcheck" class="form-control" type="hidden" value="">
+                            <div id="response">
+                                @if (session('error'))
+                                    <p class="text-danger">{{ session('error') }}</p>
+                                @endif
+                            </div>
 
-                            <button class="btn-one" id="payment-bt" data-loading-text="Please wait...">
+                            {{-- <input id="form_botcheck" name="form_botcheck" class="form-control" type="hidden" value=""> --}}
+
+                            <button class="btn-one" id="payment-btn" data-loading-text="Please wait...">
                                 <span class="txt">
                                     Fund Wallet
                                 </span>
@@ -113,7 +114,8 @@
         }
 
         const handlePaymentResponse = () => {
-            // $('#payment-btn').attr('disabled', 'disabled').text("Processing...");
+            $('#payment-btn').attr('disabled', 'disabled').text("Processing...");
+            $('#response').html('')
             $.ajax({
                 url:'{{ route('fundWalletAction') }}',
                 type: 'POST',
@@ -125,13 +127,16 @@
                     amount : $('#amount').val()
                 },
                 success: function(data){
-                    console.log('data', data)
-                    $('#response').append(`<p class="text-success">${data.message}</p>`)
+                    $('#response').html(`<p class="text-success">${data.message}</p>`)
                     $('#amount').val("");
                 },
                 error: function(data){
-                    $('#response').append(`<p class="text-warning">${data.message}</p>`)
+                    $('#response').html(`<p class="text-warning">${data.message}</p>`);
+                },
+                complete: function(data) {
+                    $('#payment-btn').attr('disabled', 'false').text("Fund Wallet");
                 }
+
             })
         }
 </script>
