@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\OTPType;
 use App\Events\UserRegistered;
 use App\Models\User;
 use App\Models\UserWallet;
@@ -28,7 +29,7 @@ class AuthService
 
     public function createUserOTP(User $user)
     {
-        $user->otp()->create(['otp' => Str::random(6)]);
+        $user->otp()->create(['otp' => Str::random(6), 'type' => OTPType::REGISTRATION]);
     }
     public function createUserWallet(User $user)
     {
